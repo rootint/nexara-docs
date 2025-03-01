@@ -119,3 +119,70 @@ Nexara поддерживает автоматическое определен�
 ## Использование языковых кодов
 
 В API и других интерфейсах вы можете указать язык, используя либо двухбуквенный код (например, "ru" для русского), либо полное название языка (например, "russian"). Система также поддерживает некоторые распространенные альтернативные названия языков (например, "valencian" для "catalan").
+
+## Примеры кода
+
+В примерах на API отправляется файл `example.mp3` и после обработки аудио в консоль выводится текст.
+
+**Python:**
+
+```python
+from openai import OpenAI
+
+client = OpenAI(
+    base_url="https://api.nexara.ru/api/v1",
+    api_key="ВАШ_API_КЛЮЧ",
+)
+
+with open("example.mp3", "rb") as audio_file:
+    transcription = client.audio.transcriptions.create(
+        model="whisper-1",
+        file=audio_file,
+        language="ru"  # указание языка (опционально)
+    )
+
+print(transcription.text)
+```
+
+**Вывод:** Восемь десятков и семь лет назад наши отцы образовали на этом континенте новую нацию...
+
+**JavaScript:**
+
+```javascript
+const OpenAI = require("openai");
+
+const openai = new OpenAI({
+  baseURL: "https://api.nexara.ru/api/v1",
+  apiKey: "ВАШ_API_КЛЮЧ",
+});
+
+async function transcribeAudio() {
+  const fs = require("fs");
+
+  const transcription = await openai.audio.transcriptions.create({
+    model: "whisper-1",
+    file: fs.createReadStream("example.mp3"),
+    language: "ru"  // указание языка (опционально)
+  });
+
+  console.log(transcription.text);
+}
+
+transcribeAudio();
+```
+
+**Вывод:** Восемь десятков и семь лет назад наши отцы образовали на этом континенте новую нацию...
+
+**cURL:**
+
+```bash
+curl --request POST \
+  --url https://api.nexara.ru/api/v1/audio/transcriptions \
+  --header 'Authorization: Bearer ВАШ_API_КЛЮЧ' \
+  --header 'Content-Type: multipart/form-data' \
+  --form model="whisper-1" \
+  --form file="@example.mp3" \
+  --form language="ru"
+```
+
+**Вывод:** Восемь десятков и семь лет назад наши отцы образовали на этом континенте новую нацию...
